@@ -5,8 +5,8 @@ const userSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
-    minlength: 2,
     unique: true,
+    minlength: 2,
     validate: {
       validator(text) {
         return validator.isEmail(text);
@@ -18,13 +18,13 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     select: false,
+    minlength: 2,
   },
   name: {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 30,
-    default: 'Аноним',
   },
 });
 
