@@ -1,0 +1,31 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "Project Project Movies Explorer backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "nodemon --inspect ./app.js",
+    "lint": "npx eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artemshchirov/movies-explorer-api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs",
+    "async",
+    "api"
+  ],
+  "author": "Artem Shchirov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artemshchirov/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/artemshchirov/movies-explorer-api#readme",
+  "devDependencies": {
+    "eslint": "^8.23.0"
+  }
+}
