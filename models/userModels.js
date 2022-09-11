@@ -4,9 +4,8 @@ const validator = require('validator');
 const userSchema = mongoose.Schema({
   email: {
     type: String,
-    required: true,
-    unique: true,
-    minlength: 2,
+    required: [true, 'The email field must be filled'],
+    unique: [true, 'The email field must be unique'],
     validate: {
       validator(text) {
         return validator.isEmail(text);
@@ -16,15 +15,15 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     select: false,
-    minlength: 2,
+    required: [true, 'The password field must be filled'],
+    minlength: [2, 'The minimum length of the "password" field is 2'],
   },
   name: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
+    required: [true, 'The name field must be filled'],
+    minlength: [2, 'The minimum length of the "name" field is 2'],
+    maxlength: [30, 'The maximum length of the "name" field is 30'],
   },
 });
 
