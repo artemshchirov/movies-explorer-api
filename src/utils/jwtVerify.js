@@ -1,13 +1,9 @@
 const jwt = require('jsonwebtoken');
-
-const { NODE_ENV, REACT_APP_JWT_SECRET } = process.env;
+const { JWT_SECRET } = require('../../config');
 
 exports.jwtVerify = (token) => {
   try {
-    return jwt.verify(
-      token,
-      NODE_ENV === 'production' ? REACT_APP_JWT_SECRET : 'dev-secret'
-    );
+    return jwt.verify(token, JWT_SECRET);
   } catch (err) {
     return false;
   }
