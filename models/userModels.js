@@ -28,4 +28,28 @@ const userSchema = mongoose.Schema({
   },
 });
 
+userSchema.statics.findUserByCredentials = function findUserByCredentials(
+  email,
+  password,
+  next
+) {
+  return this.findOne({ email })
+    .select('+password')
+    .orFail(() => {
+      throw new UnauthorizedError('401 Invalid Email or Password 1');
+    })
+    .then((user) =>
+      bcrypt
+        .compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            throw new UnauthorizedError('401 Invalid Email or Password 2');
+          }
+
+          return user;
+        })
+        .catch(next)
+    );
+};
+
 exports.User = mongoose.model('user', userSchema);
