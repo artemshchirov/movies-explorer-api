@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 const { User } = require('../models/userModels');
 const { jwtSign } = require('../utils/jwtSign');
 const { OK, CREATED, SALT_ROUND } = require('../utils/constants');
+const ConflictError = require('../errors/ConflictError');
+const NotFoundError = require('../errors/NotFoundError');
+const BadRequestError = require('../errors/BadRequestError');
 
 exports.createUser = async (req, res, next) => {
   const { email, password, name } = req.body;
@@ -20,10 +23,10 @@ exports.createUser = async (req, res, next) => {
     });
   } catch (err) {
     if (err.code === 11000) {
-      return next(new ConflictError('409: Conflict: Not Unique Email'));
+      return next(new ConflictError('409 Not Unique Email'));
     }
     if (err.name === 'ValidationError') {
-      return next(new BadRequestError('400: Invalid User Data'));
+      return next(new BadRequestError('400 Invalid User Data'));
     }
     next(err);
   }
@@ -37,4 +40,41 @@ exports.login = (req, res, next) => {
       res.status(OK).send({ token });
     })
     .catch(next);
+};
+
+exports.getCurrentUser = (req, res, next) => {
+  const { id } = req.user;
+
+  User.findById(id)
+    .orFail(() => {
+      throw new NotFoundError('404 User Not Found');
+    })
+    .then((user) => {
+      res.status(OK).send(user);
+    })
+    .catch(next);
+};
+
+exports.updateProfile = async (req, res, next) => {
+  const { name, about } = req.body;
+  const { id } = req.user;
+  try {
+    const profile = await User.findByIdAndUpdate(
+      id,
+      {
+        name,
+        about,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(OK).send({ profile });
+  } catch (err) {
+    if (err.name === 'ValidationError') {
+      return next(new BadRequestError('400: Invalid Card Data'));
+    }
+    next(err);
+  }
 };
