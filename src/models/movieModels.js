@@ -31,7 +31,7 @@ const movieSchema = mongoose.Schema({
       message: 'Invalid image URL',
     },
   },
-  trailerLink: {
+  trailer: {
     type: String,
     required: [true, 'The trailerLink field must be filled'],
     validate: {
@@ -70,3 +70,5 @@ const movieSchema = mongoose.Schema({
     required: [true, 'The nameEN field must be filled'],
   },
 });
+
+exports.Movie = mongoose.model('movie', movieSchema);
