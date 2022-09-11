@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
-// const { routes } = require('./src/routes/index');
+const { routes } = require('./src/routes/index');
 const { requestLogger, errorLogger } = require('./src/middlewares/logger');
 const { INTERNAL_SERVER_ERROR } = require('./src/utils/constants');
 
@@ -23,7 +23,7 @@ app.use(requestLogger);
 
 app.use(cors());
 
-// app.use(routes);
+app.use(routes);
 
 function main() {
   try {
@@ -48,6 +48,8 @@ function main() {
 
   app.use((err, req, res, next) => {
     const { statusCode = INTERNAL_SERVER_ERROR, message } = err;
+    console.log('err: ', err);
+
     res.status(statusCode).send({
       message:
         statusCode === INTERNAL_SERVER_ERROR
