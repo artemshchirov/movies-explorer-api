@@ -2,10 +2,11 @@ const { Movie } = require('../models/movieModels');
 const { OK, CREATED } = require('../utils/constants');
 const BadRequestError = require('../errors/BadRequestError');
 
-// TODO: getCurrentUserMovies
-exports.getMovies = async (req, res, next) => {
+exports.getCurrentUserMovies = async (req, res, next) => {
+  const { id } = req.user;
+  
   try {
-    const movies = await Movie.find({});
+    const movies = await Movie.find({ owner: id });
     res.status(OK).send(movies);
   } catch (err) {
     next(err);

@@ -4,12 +4,12 @@ const {
   validateObjId,
 } = require('../middlewares/validations');
 const {
-  getMovies,
+  getCurrentUserMovies,
   deleteMovieById,
   createMovie,
 } = require('../controllers/movieControllers');
 
-movieRouter.get('/', getMovies);
+movieRouter.get('/', getCurrentUserMovies);
 movieRouter.post('/', validateNewMovieData, createMovie);
 movieRouter.delete('/:movieId', validateObjId, deleteMovieById);
 
