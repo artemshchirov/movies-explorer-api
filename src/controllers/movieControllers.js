@@ -4,7 +4,7 @@ const BadRequestError = require('../errors/BadRequestError');
 
 exports.getCurrentUserMovies = async (req, res, next) => {
   const { id } = req.user;
-  
+
   try {
     const movies = await Movie.find({ owner: id });
     res.status(OK).send(movies);
