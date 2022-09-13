@@ -1,6 +1,6 @@
 const { INTERNAL_SERVER_ERROR } = require('../utils/constants');
 
-module.exports = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   const { statusCode = INTERNAL_SERVER_ERROR, message } = err;
 
   res.status(statusCode).send({
@@ -10,3 +10,5 @@ module.exports = (err, req, res, next) => {
         : message,
   });
 };
+
+module.exports = { errorHandler };

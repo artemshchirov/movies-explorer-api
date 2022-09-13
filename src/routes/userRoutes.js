@@ -7,7 +7,6 @@ const {
 } = require('../controllers/userControllers');
 
 userRouter.get('/me', getCurrentUser);
-
 userRouter.patch('/me', validateUserData, updateProfile);
 
 module.exports = { userRouter };
