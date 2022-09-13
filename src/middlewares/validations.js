@@ -112,7 +112,7 @@ const validateObjId = celebrate({
       .trim(true)
       .custom((value, helpers) => {
         if (ObjectId.isValid(value)) return value;
-        return helpers.message('The movieId must be valid');
+        return helpers.message('The "movieId" must be valid');
       }),
   }),
 });

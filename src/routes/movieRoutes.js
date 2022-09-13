@@ -3,6 +3,7 @@ const {
   validateNewMovieData,
   validateObjId,
 } = require('../middlewares/validations');
+const { validateMovieOwner } = require('../middlewares/validateMovieOwner');
 const {
   getCurrentUserMovies,
   deleteMovieById,
@@ -11,6 +12,6 @@ const {
 
 movieRouter.get('/', getCurrentUserMovies);
 movieRouter.post('/', validateNewMovieData, createMovie);
-movieRouter.delete('/:movieId', validateObjId, deleteMovieById);
+movieRouter.delete('/:movieId', [validateMovieOwner, validateObjId], deleteMovieById);
 
 module.exports = { movieRouter };
