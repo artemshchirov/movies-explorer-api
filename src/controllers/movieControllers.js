@@ -26,6 +26,8 @@ exports.createMovie = async (req, res, next) => {
     thumbnail,
     movieId,
   } = req.body;
+  const { id } = req.user;
+
   try {
     const newMovie = await Movie.create({
       country,
@@ -39,10 +41,13 @@ exports.createMovie = async (req, res, next) => {
       nameEN,
       thumbnail,
       movieId,
+      owner: id,
     });
+    newMovie.populate('owner');
     res.status(CREATED).send(newMovie);
   } catch (err) {
     if (err.name === 'ValidationError') {
+      console.log('err: ', err.message);
       next(new BadRequestError('400 Invalid Movie Data'));
     } else {
       next(err);
@@ -52,6 +57,7 @@ exports.createMovie = async (req, res, next) => {
 
 exports.deleteMovieById = async (req, res, next) => {
   const { movieId } = req.params;
+
   try {
     const movie = await Movie.findByIdAndRemove(movieId).orFail(() => {
       throw new BadRequestError('400 Movie Not Found');
