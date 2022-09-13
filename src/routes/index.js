@@ -15,8 +15,6 @@ routes.use(auth);
 routes.use('/users', userRouter);
 routes.use('/movies', movieRouter);
 
-routes.use('/', (req, res, next) =>
-  next(new NotFoundError('404 Not Found Error'))
-);
+routes.use('/', (req, res, next) => next(new NotFoundError('404 Not Found Error')));
 
 module.exports = { routes };

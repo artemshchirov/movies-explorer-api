@@ -10,6 +10,7 @@ const {
   consoleLogger,
 } = require('./src/middlewares/logger');
 const { MONGO_URL } = require('./config');
+
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -24,8 +25,8 @@ try {
     },
     (err) => {
       if (err) throw err;
-      console.log('Connected to moviesdb');
-    }
+      console.log(`Connected to ${MONGO_URL}`);
+    },
   );
 } catch (err) {
   throw new Error(err.message);

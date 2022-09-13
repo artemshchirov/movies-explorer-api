@@ -58,7 +58,7 @@ const movieSchema = mongoose.Schema({
     ref: 'user',
   },
   movieId: {
-    //TODO: выяснить необходимый type
+    // TODO: выяснить необходимый type
     type: String,
     required: [true, 'The "movieId" field must be filled'],
   },

@@ -30,6 +30,7 @@ exports.createUser = async (req, res, next) => {
     }
     next(err);
   }
+  return null;
 };
 
 exports.login = (req, res, next) => {
@@ -56,25 +57,26 @@ exports.getCurrentUser = (req, res, next) => {
 };
 
 exports.updateProfile = async (req, res, next) => {
-  const { name, about } = req.body;
+  const { email, name } = req.body;
   const { id } = req.user;
   try {
     const profile = await User.findByIdAndUpdate(
       id,
       {
+        email,
         name,
-        about,
       },
       {
         new: true,
         runValidators: true,
-      }
+      },
     );
     res.status(OK).send({ profile });
   } catch (err) {
     if (err.name === 'ValidationError') {
-      return next(new BadRequestError('400: Invalid Card Data'));
+      return next(new BadRequestError('400 Invalid Card Data'));
     }
     next(err);
   }
+  return null;
 };

@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { NODE_ENV, JWT_SECRET, MONGO_URL  } = process.env;
+const { NODE_ENV, JWT_SECRET, MONGO_URL } = process.env;
 
 module.exports = {
   JWT_SECRET: NODE_ENV === 'production' ? JWT_SECRET : 'JWT_SECRET',

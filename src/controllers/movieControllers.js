@@ -48,7 +48,6 @@ exports.createMovie = async (req, res, next) => {
     res.status(CREATED).send(newMovie);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      console.log('err: ', err.message);
       next(new BadRequestError('400 Invalid Movie Data'));
     } else {
       next(err);
