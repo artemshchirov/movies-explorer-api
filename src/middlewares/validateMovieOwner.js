@@ -2,7 +2,6 @@ const { Movie } = require('../models/movieModels');
 const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
 
-// eslint-disable-next-line consistent-return
 exports.validateMovieOwner = async (req, res, next) => {
   const { id } = req.user;
   const { movieId } = req.params;
@@ -14,7 +13,9 @@ exports.validateMovieOwner = async (req, res, next) => {
       throw new ForbiddenError('403 Authorized But Forbidden');
     }
   } catch (err) {
-    return next(err);
+    next(err);
   }
   next();
+
+  return null;
 };
