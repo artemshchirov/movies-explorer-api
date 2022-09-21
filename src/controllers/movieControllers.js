@@ -1,54 +1,32 @@
 const { Movie } = require('../models/movieModels');
-const { OK, CREATED } = require('../utils/constants');
+const { STATUSE, MESSAGE } = require('../utils/constants');
 const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
 
 exports.getCurrentUserMovies = async (req, res, next) => {
   const { id } = req.user;
 
   try {
     const movies = await Movie.find({ owner: id });
-    res.status(OK).send(movies);
+    res.send(movies);
   } catch (err) {
     next(err);
   }
 };
 
 exports.createMovie = async (req, res, next) => {
-  const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailer,
-    nameRU,
-    nameEN,
-    thumbnail,
-    movieId,
-  } = req.body;
   const { id } = req.user;
 
   try {
     const newMovie = await Movie.create({
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailer,
-      nameRU,
-      nameEN,
-      thumbnail,
-      movieId,
+      ...req.body,
       owner: id,
     });
     newMovie.populate('owner');
-    res.status(CREATED).send(newMovie);
+    res.status(STATUSE.CREATED).send(newMovie);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      next(new BadRequestError('400 Invalid Movie Data'));
+      next(new BadRequestError(MESSAGE.INVALID_MOVIE_DATA));
     } else {
       next(err);
     }
@@ -60,9 +38,9 @@ exports.deleteMovieById = async (req, res, next) => {
 
   try {
     const movie = await Movie.findByIdAndRemove(movieId).orFail(() => {
-      throw new BadRequestError('400 Movie Not Found');
+      throw new NotFoundError(MESSAGE.MOVIE_NOT_FOUND);
     });
-    res.status(OK).send(movie);
+    res.send(movie);
   } catch (err) {
     next(err);
   }

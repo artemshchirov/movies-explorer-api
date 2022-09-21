@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const { NODE_ENV, JWT_SECRET, MONGO_URL } = process.env;
 
 module.exports = {

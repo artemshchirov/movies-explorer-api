@@ -8,9 +8,8 @@ const validateUserBody = celebrate({
       .messages({
         'any.required': 'The "email" field must be filled',
       }),
-    password: Joi.string().required().trim(true).min(2)
+    password: Joi.string().required().trim(true)
       .messages({
-        'string.min': 'The minimum length of the "password" field is 2',
         'any.required': 'The "password" field must be filled',
       }),
     name: Joi.string().required().trim(true).min(2)
@@ -30,9 +29,8 @@ const validateAuthentication = celebrate({
         'string.required': 'The "email" field must be filled',
         'any.required': 'The "email" field must be filled',
       }),
-    password: Joi.string().required().trim(true).min(2)
+    password: Joi.string().required().trim(true)
       .messages({
-        'string.min': 'The minimum length of the "password" field is 2',
         'any.required': 'The "password" field must be filled',
       }),
   }),
@@ -99,7 +97,7 @@ const validateNewMovieData = celebrate({
         if (validator.isURL(value)) return value;
         return helpers.message('The "thumbnail" field must be valid URL');
       }),
-    movieId: Joi.string().required().trim(true).messages({
+    movieId: Joi.number().required().messages({
       'any.required': 'The "movieId" field must be filled',
     }),
   }),

@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const { User } = require('../models/userModels');
 const { jwtSign } = require('../utils/jwtSign');
-const { OK, CREATED, SALT_ROUND } = require('../utils/constants');
+const { STATUSE, MESSAGE, SALT_ROUND } = require('../utils/constants');
 const ConflictError = require('../errors/ConflictError');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
@@ -15,7 +15,7 @@ exports.createUser = async (req, res, next) => {
       password: hashPassword,
       name,
     });
-    res.status(CREATED).send({
+    res.status(STATUSE.CREATED).send({
       newUser: {
         email: newUser.email,
         name: newUser.name,
@@ -23,14 +23,13 @@ exports.createUser = async (req, res, next) => {
     });
   } catch (err) {
     if (err.code === 11000) {
-      return next(new ConflictError('409 Not Unique Email'));
+      next(new ConflictError(MESSAGE.NOT_UNIQUE_EMAIL));
     }
     if (err.name === 'ValidationError') {
-      return next(new BadRequestError('400 Invalid User Data'));
+      next(new BadRequestError(MESSAGE.INVALID_USER_DATA));
     }
     next(err);
   }
-  return null;
 };
 
 exports.login = (req, res, next) => {
@@ -38,20 +37,19 @@ exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwtSign(user._id);
-      res.status(OK).send({ token });
+      res.send({ token });
     })
     .catch(next);
 };
 
 exports.getCurrentUser = (req, res, next) => {
   const { id } = req.user;
-
   User.findById(id)
     .orFail(() => {
-      throw new NotFoundError('404 User Not Found');
+      throw new NotFoundError(MESSAGE.USER_NOT_FOUND);
     })
     .then((user) => {
-      res.status(OK).send(user);
+      res.send(user);
     })
     .catch(next);
 };
@@ -71,12 +69,13 @@ exports.updateProfile = async (req, res, next) => {
         runValidators: true,
       },
     );
-    res.status(OK).send({ profile });
+    res.send({ profile });
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      return next(new BadRequestError('400 Invalid Card Data'));
+    if (err.code === 11000) {
+      next(new ConflictError(MESSAGE.NOT_UNIQUE_EMAIL));
+    } else if (err.name === 'CastError' || err.name === 'ValidationError') {
+      next(new BadRequestError(MESSAGE.INVALID_USER_DATA));
     }
     next(err);
   }
-  return null;
 };

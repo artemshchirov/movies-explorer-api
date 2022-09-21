@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
 const { limiter } = require('./src/middlewares/rateLimit');
-const { routes } = require('./src/routes/index');
+const { routes } = require('./src/routes');
 const { errorHandler } = require('./src/middlewares/errorHandler');
 const {
   requestLogger,
@@ -18,26 +19,20 @@ const { PORT = 3000 } = process.env;
 const app = express();
 app.use(express.json());
 
-try {
-  mongoose.connect(
-    MONGO_URL,
-    {
-      useNewUrlParser: true,
-      autoIndex: true,
-    },
-    (err) => {
-      if (err) throw err;
-      console.log(`Connected to ${MONGO_URL}`);
-    },
-  );
-} catch (err) {
-  throw new Error(err.message);
-}
+mongoose
+  .connect(MONGO_URL, {
+    useNewUrlParser: true,
+    autoIndex: true,
+  })
+  .then(() => console.log(`Connected to ${MONGO_URL}`))
+  .catch((err) => {
+    throw new Error(err.message);
+  });
 
 app.use(consoleLogger);
+app.use(requestLogger);
 app.use(limiter);
 app.use(helmet());
-app.use(requestLogger);
 app.use(cors());
 app.use(routes);
 app.use(errorLogger);

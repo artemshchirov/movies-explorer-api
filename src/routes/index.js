@@ -7,6 +7,7 @@ const {
   validateUserBody,
   validateAuthentication,
 } = require('../middlewares/validations');
+const { MESSAGE } = require('../utils/constants');
 const NotFoundError = require('../errors/NotFoundError');
 
 routes.post('/signup', validateUserBody, createUser);
@@ -15,6 +16,6 @@ routes.use(auth);
 routes.use('/users', userRouter);
 routes.use('/movies', movieRouter);
 
-routes.use('/', (req, res, next) => next(new NotFoundError('404 Not Found Error')));
+routes.use('/', (req, res, next) => next(new NotFoundError(MESSAGE.PAGE_NOT_FOUND)));
 
 module.exports = { routes };
