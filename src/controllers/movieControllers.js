@@ -1,7 +1,7 @@
-const { Movie } = require('../models/movieModels');
-const { STATUSE, MESSAGE } = require('../utils/constants');
-const BadRequestError = require('../errors/BadRequestError');
-const NotFoundError = require('../errors/NotFoundError');
+const { Movie } = require("../models/movieModels");
+const { STATUS, MESSAGE } = require("../utils/constants");
+const BadRequestError = require("../errors/BadRequestError");
+const NotFoundError = require("../errors/NotFoundError");
 
 exports.getCurrentUserMovies = async (req, res, next) => {
   const { id } = req.user;
@@ -22,10 +22,10 @@ exports.createMovie = async (req, res, next) => {
       ...req.body,
       owner: id,
     });
-    newMovie.populate('owner');
-    res.status(STATUSE.CREATED).send(newMovie);
+    newMovie.populate("owner");
+    res.status(STATUS.CREATED).send(newMovie);
   } catch (err) {
-    if (err.name === 'ValidationError') {
+    if (err.name === "ValidationError") {
       next(new BadRequestError(MESSAGE.INVALID_MOVIE_DATA));
     } else {
       next(err);

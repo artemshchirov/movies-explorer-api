@@ -1,10 +1,10 @@
-const bcrypt = require('bcrypt');
-const { User } = require('../models/userModels');
-const { jwtSign } = require('../utils/jwtSign');
-const { STATUSE, MESSAGE, SALT_ROUND } = require('../utils/constants');
-const ConflictError = require('../errors/ConflictError');
-const NotFoundError = require('../errors/NotFoundError');
-const BadRequestError = require('../errors/BadRequestError');
+const bcrypt = require("bcrypt");
+const { User } = require("../models/userModels");
+const { jwtSign } = require("../utils/jwtSign");
+const { STATUS, MESSAGE, SALT_ROUND } = require("../utils/constants");
+const ConflictError = require("../errors/ConflictError");
+const NotFoundError = require("../errors/NotFoundError");
+const BadRequestError = require("../errors/BadRequestError");
 
 exports.createUser = async (req, res, next) => {
   const { email, password, name } = req.body;
@@ -15,7 +15,7 @@ exports.createUser = async (req, res, next) => {
       password: hashPassword,
       name,
     });
-    res.status(STATUSE.CREATED).send({
+    res.status(STATUS.CREATED).send({
       newUser: {
         email: newUser.email,
         name: newUser.name,
@@ -25,7 +25,7 @@ exports.createUser = async (req, res, next) => {
     if (err.code === 11000) {
       next(new ConflictError(MESSAGE.NOT_UNIQUE_EMAIL));
     }
-    if (err.name === 'ValidationError') {
+    if (err.name === "ValidationError") {
       next(new BadRequestError(MESSAGE.INVALID_USER_DATA));
     }
     next(err);
@@ -67,13 +67,13 @@ exports.updateProfile = async (req, res, next) => {
       {
         new: true,
         runValidators: true,
-      },
+      }
     );
     res.send({ profile });
   } catch (err) {
     if (err.code === 11000) {
       next(new ConflictError(MESSAGE.NOT_UNIQUE_EMAIL));
-    } else if (err.name === 'CastError' || err.name === 'ValidationError') {
+    } else if (err.name === "CastError" || err.name === "ValidationError") {
       next(new BadRequestError(MESSAGE.INVALID_USER_DATA));
     }
     next(err);

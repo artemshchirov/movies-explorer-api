@@ -1,6 +1,6 @@
 const SALT_ROUND = 10;
 
-const STATUSE = {
+const STATUS = {
   OK: 200,
   CREATED: 201,
   BAD_REQUEST: 400,
@@ -24,4 +24,4 @@ const MESSAGE = {
   INTERNAL_SERVER_ERROR: '500 Internal Server Error',
 };
 
-module.exports = { STATUSE, MESSAGE, SALT_ROUND };
+module.exports = { STATUS, MESSAGE, SALT_ROUND };
